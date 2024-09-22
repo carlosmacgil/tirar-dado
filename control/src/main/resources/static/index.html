@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tirar un dado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .resultado {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Tirar un dado</h1>
+        <button id="rollButton">Tirar</button>
+        <div class="resultado" id="resultado">Resultado: </div>
+    </div>
+
+    <script>
+        document.getElementById('rollButton').addEventListener('click', function() {
+            fetch('http://localhost:8080/api/tirardado', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('resultado').innerText = 'Resultado: ' + data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('resultado').innerText = 'Error al obtener el resultado';
+            });
+        });
+    </script>
+
+</body>
+</html>
